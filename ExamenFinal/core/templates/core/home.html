@@ -1,0 +1,206 @@
+{% load static %}
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+      integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+      integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin="">
+    </script>
+
+    <title>home</title>
+</head>
+
+<body style="width: 100%; height: 100%;">
+    <div class="text-center"> <div class="p-3 mb-2 bg-light text-dark" style="font-size: 40px; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Garden Store
+        <img style="width: 60px; height: 60px;" src="{% static 'core/img/plantita.png'%}" class="rounded" alt="...">
+      </div> </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link " href="{% url 'CORE:producto_index' %}"> <img src="{% static 'core/img/home.png'%}" alt="..."> Inicio </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'CORE:producto_productos' %}">Productos</a>
+              </li>
+              {% if user.is_authenticated%}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'CORE:carrito_compras' %}">Compras</a>
+              </li>
+              {% else %}
+              {% endif %}
+              
+
+              {% if user.is_superuser %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'CORE:producto_create' %}">Agregar producto</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="admin/">Consola Admin</a>
+              </li>
+              
+              {% endif %}
+
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link" href="">Bienvenido {{user.username.upper}}</b></a>
+              </li>
+              {% endif %}
+              
+            </ul>
+            
+            <form class="d-flex">
+              {% if user.is_authenticated %}
+
+              {% else %}
+              <!--<li class="nav-item">
+                <a class="nav-link" href="{% url 'CORE:registro' %}" style="color: black;"> <img src="{% static 'core/img/login.png'%}" alt="..."> Registro</a>
+              </li>-->
+              <a type="button" class="btn btn-outline-success my-2 my-sm-0" href="accounts/login/?next=/" style="color: black;">  <img src="{% static 'core/img/login.png' %}"> </a>
+              
+              {% endif %}
+
+              <div style="padding-left: 10px;"></div>
+
+              {% if user.is_superuser or not user.is_authenticated %}
+                <button type="button" class="btn btn-outline-secondary" disabled > <img src="{% static 'core/img/cart.png'%}" alt="..."> </button>
+                <!--<img style="width: 15%; height: 15%;" src="{% static 'core/img/icono.png'%}" alt="...">-->
+              {% else %}
+                <a type="button" class="btn btn-outline-dark my-2 my-sm-0" href="{% url 'CORE:carrito_index' %}"> <img src="{% static 'core/img/cart.png'%}" alt="..."> </a>
+              {% endif %}
+
+              <div style="padding-left: 10px;"></div>
+
+              {% if user.is_authenticated %}
+                <a type="button" class="btn btn-outline-danger my-2 my-sm-0" href="{% url 'logout'%}?next=/"> <img src="{% static 'core/img/logout.png'%}" alt="..."> </a>
+              {% endif %}
+            </form>
+          </div>
+        </div>
+      </nav>
+
+      <!-- MENSAJES -->
+      {% if messages %}
+      {% for message in messages %}
+          <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+            <strong>{{ message }}</strong> 
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+      {% endfor %}
+      {% endif %}
+    
+    <!-- DIV PARA EL CONTENIDO-->
+      <div class="row" style="background-color: rgb(214, 214, 214);">
+        <div class="col">
+            {% block content %}
+            {% endblock %}           
+        </div>
+      </div>
+
+  <!-- Footer -->
+<footer class="text-center text-lg-start bg-light text-muted">
+  <!-- Section: Social media -->
+  <section
+    class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom"
+  >
+    <!-- Left -->
+    
+    <!-- Right -->
+  </section>
+  <!-- Section: Social media -->
+
+  <!-- Section: Links  -->
+  <section class="">
+    <div class="container text-center text-md-start mt-5">
+      <!-- Grid row -->
+      <div class="row mt-3">
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+          <!-- Content -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            <img src="{% static 'core/img/people.png'%}"> Garden Store
+          </h6>
+          <p>
+          </p>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            Redes
+          </h6>
+          <p>
+            <a href="https://www.instagram.com/" class="text-reset"> <img src="{% static 'core/img/instagram.png'%}"> Instagram</a>
+          </p>
+          <p>
+            <a href="https://www.facebook.com/" class="text-reset"><img src="{% static 'core/img/facebook.png'%}"> Facebook</a>
+          </p>
+        </div>
+
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+          <!-- Links -->
+          <h6 class="text-uppercase fw-bold mb-4">
+            Contact
+          </h6>
+          <p><a href="{% url 'CORE:ubicacion' %}" style="text-decoration: none; color:black"><img src="{% static 'core/img/address.png'%}"> Merced 349, Santiago</a></p>
+          <p>
+            <img src="{% static 'core/img/mail.png' %}"> 
+            garden.admin@gmail.com
+          </p>
+          <p><img src="{% static 'core/img/wsp.png' %}"> +569 8315 0592</p>
+          <p><img src="{% static 'core/img/phone.png' %}"> +2 2371 47481</p>
+        </div>
+        <!-- Grid column -->
+      </div>
+      <!-- Grid row -->
+    </div>
+  </section>
+  <!-- Section: Links  -->
+
+  <!-- Copyright -->
+  <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+    © 2022 Copyright:
+    <a class="text-reset fw-bold" href="{% url 'CORE:producto_index' %}">GardenStore.com</a>
+  </div>
+  <!-- Copyright -->
+</footer>
+<!-- Footer -->
+    <!-- Copyright
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+      © 2022 Copyright:
+      <a class="text-dark" href="{% url 'CORE:producto_index' %}">GardenStore.com</a>
+    </div>Copyright -->
+		
+
+    
+    <!-- Optional JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
+      crossorigin="anonymous"></script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" 
+      integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" 
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" 
+      integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" 
+      crossorigin="anonymous"></script>
+</body>
+
+</html>

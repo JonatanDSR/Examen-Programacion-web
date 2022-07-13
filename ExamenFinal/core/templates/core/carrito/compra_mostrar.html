@@ -1,0 +1,45 @@
+{% extends "core/home.html" %}
+{% block content %}
+        <div class="container justify-content-md-center" style="outline: black solid 1px;  width: 100%; ">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Descuento</th>
+                  </tr>
+                </thead>
+
+            {% for item in productos %}
+                
+                {% if item.producto.descuento > 0 %}
+                <tbody> 
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{item.producto.nombreProducto.title}}</td>
+                      <td>{{item.producto.precio}}</td>
+                      <td>{{ item.producto.descuento }}% OFF</td>
+                    </tr>
+                </tbody>
+                {% else %}
+                <tbody> 
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{item.producto.nombreProducto.title}}</td>
+                      <td>{{item.producto.precio}}</td>
+                    </tr>
+                </tbody>
+                {% endif %}
+                
+            {% empty %}
+                <div class="col-12 p-0 m-0">
+                    <p class="d-flex justify-content-between align-items-center">
+                        No tiene ningun producto en el carrito
+                    </p>
+                    <a href="{% url 'CORE:producto_productos' %}" class="btn btn-outline-success ">Ir a comprar</a>
+                </div>
+            {% endfor %}
+            </table>
+        </div>
+{% endblock %}

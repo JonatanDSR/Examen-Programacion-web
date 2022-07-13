@@ -1,0 +1,37 @@
+{% extends "core/home.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+  <!--<div>
+        <img src="{% static 'core/img/flor3.jpg'%}" class="rounded" alt="...">
+    </div>-->
+  <div id="carouselExampleControls" style="width: 90%;" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="{% static 'core/img/1.png'%}" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'core/img/2.png'%}" class="d-block w-100" alt="...">
+          </div>
+          <!--<div class="carousel-item">
+            <img src="..." class="d-block w-100" alt="...">
+          </div>-->
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    
+
+</div>
+
+
+{% endblock %}
